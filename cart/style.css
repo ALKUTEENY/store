@@ -1,0 +1,27 @@
+.total-box {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.checkout-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 20px;
+  background-color: #28a745;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.checkout-btn:hover {
+  background-color: #1f7d36;
+}
+
+.product-card input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  text-align: center;
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>الدفع</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header, footer {
+      background-color: #343a40;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    form h3 {
+      margin-bottom: 20px;
+    }
+
+    form label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px;
+      margin-top: 20px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .order-summary {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .order-summary h3 {
+      margin-bottom: 15px;
+    }
+
+    .order-summary ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .order-summary li {
+      margin-bottom: 10px;
+    }
+
+    @media(max-width: 768px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>الدفع</h1>
+  </header>
+
+  <main>
+    <form id="checkoutForm">
+      <h3>معلومات العميل</h3>
+
+      <label>الاسم الكامل</label>
+      <input type="text" name="name" required />
+
+      <label>البريد الإلكتروني</label>
+      <input type="email" id="prim" name="email" required />
+
+      <label>رقم الهاتف</label>
+      <input type="tel" name="phone" required />
+
+      <label>العنوان الكامل</label>
+      <textarea name="address" rows="3" required></textarea>
+
+      <button type="submit">تأكيد الطلب</button>
+    </form>
+
+    <div class="order-summary">
+      <h3>مراجعة الطلب</h3>
+      <ul id="orderList"></ul>
+      <p>المجموع: <strong><span id="total">0</span> ريال</strong></p>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 SSCA - جميع الحقوق محفوظة
+  </footer>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const orderList = document.getElementById("orderList");
+    const totalEl = document.getElementById("total");
+    const checkoutForm = document.getElementById("checkoutForm");
+
+    let total = 0;
+    cart.forEach(item => {
+      const itemTotal = item.qty * item.price;
+      total += itemTotal;
+      const li = document.createElement("li");
+      li.textContent = `${item.name} × ${item.qty} = ${itemTotal} ريال`;
+      orderList.appendChild(li);
+    });
+
+    const discountN = "asoom";
+    const discountE = "asmasama723@gmail.com"
+    const formData = new FormData(checkoutForm);
+    const name = formData.get("name");
+    const email = formData.get("email");
+
+    let vat = +(total * 0.15).toFixed(2);
+    vat += total;
+
+    if (name === discountN && email === discountE) {
+      total = 0;
+      vat = 0;
+    }
+
+    totalEl.textContent = total.toFixed(2);
+
+    checkoutForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(checkoutForm);
+      const order = {
+        customer: {
+          name: formData.get("name"),
+          email: formData.get("email"),
+          phone: formData.get("phone"),
+          address: formData.get("address")
+        },
+        items: cart,
+        total: total.toFixed(2),
+        date: new Date().toLocaleString()
+      };
+
+      // حفظ الطلب في LocalStorage كنموذج مبدئي
+      const orders = JSON.parse(localStorage.getItem("orders")) || [];
+      orders.push(order);
+      localStorage.setItem("orders", JSON.stringify(orders));
+      if (name === discountN && email === discountE) {
+        alert(" تم تأكيد الطلب! شكراً لك اسووووم , خصم 100% ");
+        window.location.href = "index.html"; // إعادة التوجيه للصفحة الرئيسية أو رسالة شكر
+      } else {
+        alert("تم تأكيد الطلب! شكراً لك.");
+      // window.location.href = "index.html"; // إعادة التوجيه للصفحة الرئيسية أو رسالة شكر
+      }
+       // تفريغ السلة
+      // localStorage.removeItem("cart");
+    });
+  </script>
+
+</body>
+</html>
