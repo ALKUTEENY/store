@@ -104,7 +104,7 @@
       <input type="text" name="name" required />
 
       <label>البريد الإلكتروني</label>
-      <input type="email" id="prim" name="email" required />
+      <input type="email" name="email" required />
 
       <label>رقم الهاتف</label>
       <input type="tel" name="phone" required />
@@ -123,7 +123,7 @@
   </main>
 
   <footer>
-    &copy; 2025 SSCA - جميع الحقوق محفوظة
+    &copy; 2025 متجرك الذكي - جميع الحقوق محفوظة
   </footer>
 
   <script>
@@ -141,20 +141,8 @@
       orderList.appendChild(li);
     });
 
-    const discountN = "asoom";
-    const discountE = "asmasama723@gmail.com"
-    const formData = new FormData(checkoutForm);
-    const name = formData.get("name");
-    const email = formData.get("email");
-
-    let vat = +(total * 0.15).toFixed(2);
-    vat += total;
-
-    if (name === discountN && email === discountE) {
-      total = 0;
-      vat = 0;
-    }
-
+    const vat = +(total * 0.15).toFixed(2);
+    total += vat;
     totalEl.textContent = total.toFixed(2);
 
     checkoutForm.addEventListener("submit", function(e) {
@@ -177,15 +165,12 @@
       const orders = JSON.parse(localStorage.getItem("orders")) || [];
       orders.push(order);
       localStorage.setItem("orders", JSON.stringify(orders));
-      if (name === discountN && email === discountE) {
-        alert(" تم تأكيد الطلب! شكراً لك اسووووم , خصم 100% ");
-        window.location.href = "index.html"; // إعادة التوجيه للصفحة الرئيسية أو رسالة شكر
-      } else {
-        alert("تم تأكيد الطلب! شكراً لك.");
-      // window.location.href = "index.html"; // إعادة التوجيه للصفحة الرئيسية أو رسالة شكر
-      }
-       // تفريغ السلة
-      // localStorage.removeItem("cart");
+
+      // تفريغ السلة
+      localStorage.removeItem("cart");
+
+      alert("تم تأكيد الطلب! شكراً لك.");
+      window.location.href = "index.html"; // إعادة التوجيه للصفحة الرئيسية أو رسالة شكر
     });
   </script>
 
